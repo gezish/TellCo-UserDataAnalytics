@@ -110,3 +110,14 @@ def fix_missing_value(df, col, value):
     else:
         print(f"{count} missing values in the column {col} have been replaced by {value}.")
     return df[col]
+
+def drop_duplicates(df):
+    old = df.shape[0]
+    df.drop_duplicates(inplace=True)
+    new = df.shape[0]
+    count = old - new
+    if (count == 0):
+        print("No duplicate rows were found.")
+    else:
+        print(f"{count} duplicate rows were found and removed.")
+
