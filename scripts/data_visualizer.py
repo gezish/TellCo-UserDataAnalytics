@@ -25,3 +25,14 @@ def plotly_plot_hist(df, column, color=['cornflowerblue']):
             title=f'Distribution of {column}')
     fig.update_layout(bargap=0.01)
     fig.show()
+    
+def plotly_plot_scatter(df, x_col, y_col, marker_size, hover=[]):
+    fig = px.scatter(
+            df,
+            x=x_col,
+            y=y_col,
+            opacity=0.8,
+            hover_data=hover,
+            title=f'{x_col} vs. {y_col}')
+    fig.update_traces(marker_size=marker_size)
+    fig.show()
