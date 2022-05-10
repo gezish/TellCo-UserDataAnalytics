@@ -121,3 +121,17 @@ def drop_duplicates(df):
     else:
         print(f"{count} duplicate rows were found and removed.")
 
+def drop_rows_with_missing_values(df):
+    old = df.shape[0]
+    df.dropna(inplace=True)
+    new = df.shape[0]
+    count = old - new
+    print(f"{count} rows containg missing values were dropped.")
+
+def drop_columns(df, columns):
+    df.drop(columns, axis=1, inplace=True)
+    count = len(columns)
+    if count == 1:
+        print(f"{count} column was dropped.")
+    else:
+        print(f"{count} columns were dropped.")
