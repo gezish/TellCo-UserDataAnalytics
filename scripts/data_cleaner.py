@@ -33,7 +33,7 @@ def percent_missing_values(df):
     totalMissing = missingCount.sum()
 
     # Calculate percentage of missing values
-    print("The dataset contains", round(((totalMissing/totalCells) * 100), 2), "%", "missing values.")
+    print("These dataset contains", round(((totalMissing/totalCells) * 100), 2), "%", "missing values.")
     
 
 def percent_missing_rows(df):
@@ -71,7 +71,7 @@ def missing_values_table(df):
     '% of Total Values', ascending=False).round(2)
 
     # Print some summary information
-    print ("Your selected dataframe has " + str(df.shape[1]) + " columns.\n"
+    print ("The selected dataframe has " + str(df.shape[1]) + " columns.\n"
         "There are " + str(mis_val_table_ren_columns.shape[0]) +
           " columns that have missing values.")
 
