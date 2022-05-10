@@ -34,3 +34,16 @@ def percent_missing_values(df):
 
     # Calculate percentage of missing values
     print("The dataset contains", round(((totalMissing/totalCells) * 100), 2), "%", "missing values.")
+    
+
+def percent_missing_rows(df):
+
+    # Calculate total number rows with missing values
+    missing_rows = sum([True for idx,row in df.iterrows() if any(row.isna())])
+
+    # Calculate total number of rows
+    total_rows = df.shape[0]
+
+    # Calculate the percentage of missing rows
+    print(round(((missing_rows/total_rows) * 100), 2), "%",
+    "of the rows in the dataset contain atleast one missing value.")
