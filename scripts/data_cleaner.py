@@ -80,3 +80,9 @@ def missing_values_table(df):
 
     # Return the dataframe with missing information
     return mis_val_table_ren_columns
+
+def fix_missing_ffill(df, col):
+    count = df[col].isna().sum()
+    df[col] = df[col].fillna(method='ffill')
+    print(f"{count} missing values in the column {col} have been replaced using the forward fill method.")
+    return df[col]
