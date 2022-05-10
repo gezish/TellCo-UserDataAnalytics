@@ -86,3 +86,27 @@ def fix_missing_ffill(df, col):
     df[col] = df[col].fillna(method='ffill')
     print(f"{count} missing values in the column {col} have been replaced using the forward fill method.")
     return df[col]
+
+
+def fix_missing_bfill(df, col):
+    count = df[col].isna().sum()
+    df[col] = df[col].fillna(method='bfill')
+    print(f"{count} missing values in the column {col} have been replaced using the backward fill method.")
+    return df[col]
+
+def fix_missing_median(df, col):
+    median = df[col].median()
+    count = df[col].isna().sum()
+    df[col] = df[col].fillna(median)
+    print(f"{count} missing values in the column {col} have been replaced by its median value {median}.")
+    return df[col]
+
+
+def fix_missing_value(df, col, value):
+    count = df[col].isna().sum()
+    df[col] = df[col].fillna(value)
+    if type(value) == 'str':
+        print(f"{count} missing values in the column {col} have been replaced by '{value}'.")
+    else:
+        print(f"{count} missing values in the column {col} have been replaced by {value}.")
+    return df[col]
