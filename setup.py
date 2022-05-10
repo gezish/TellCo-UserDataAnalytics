@@ -16,11 +16,6 @@ requirements = requirements_list
 
 test_requirements = []
 
-
-#requirements = ['pandas>=1.1.0', 'numpy>=1.19.0', ]
-
-#test_requirements = ['pytest>=3', ]
-
 setup(
     author="Gezahegne",
     email="enggezahegn.w@gmail.com",
