@@ -80,3 +80,9 @@ class OutlierHandler:
         new_df = pd.DataFrame(data=data, columns=new_columns)
         new_df.set_index('Name of columns', inplace=True)
         return new_df.sort_values('Number_of_outliers', ascending=False).transpose()
+
+
+
+
+    
+    
