@@ -1,13 +1,13 @@
 import sys
 import os
-import sys
+import sys, os
 import numpy as np
 import pandas as pd
 import streamlit as st
 from streamlit_pandas_profiling import st_profile_report
 
 sys.path.insert(1, '../scripts')
-from constants import *
+import constants as con
 from df_outlier import DfOutlier
 from df_overview import DfOverview
 # from scripts import df_overview
@@ -23,7 +23,8 @@ def loadOriginalData():
 
 
 def loadPreprocessedData():
-    df = pd.read_csv("../data/my_clean_data.csv")
+    df = pd.read_csv("../data/clean_data.csv")
+    #print(df.shape)
     return df
 
 
@@ -37,7 +38,7 @@ def app():
         Here is description of all the features
     ''')
     df = loadDescription()
-    st.write(df, width=1200)
+    st.write(df)
 
     st.header('Here is sample data from the table')
     df = loadOriginalData()
@@ -59,7 +60,7 @@ def app():
 
     st.header('Outliers in the data')
     df = loadPreprocessedData()
-    numeric_df = df[NUMERIC_COLUMNS].copy()
+    numeric_df = df[con.NUMERIC_COLUMNS].copy()
     st.markdown(
     '''
     The table below shows outliers in the data.
