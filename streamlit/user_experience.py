@@ -47,7 +47,7 @@ def getExperienceDataFrame():
 @st.cache
 def getExperienceData():
     df = getExperienceDataFrame().copy()
-    user_experience = df.groupby('msisdn_number').agg({
+    user_experience = df.groupby('MSISDN/Number').agg({
         'total_avg_rtt': 'sum',
         'total_avg_tp': 'sum',
         'total_avg_tcp': 'sum'})
