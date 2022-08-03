@@ -22,13 +22,13 @@ helper = DfHelper()
 
 @st.cache
 def getEngagemetData():
-    df = pd.read_csv("../data/TellCo_user_engagement.csv")
+    df = pd.read_csv("../data/TellCo_user_engagements.csv")
     return df
 
 
 @st.cache
 def getExperienceData():
-    df = pd.read_csv("../data/TellCo_user_experiance.csv")
+    df = pd.read_csv("../data/TellCo_user_experience_data.csv")
     return df
 
 
@@ -45,7 +45,7 @@ def getNormalExperience(df):
 @st.cache
 def getNormalEngagement(df):
     df_outliers = DfOutlier(df.copy())
-    cols = ['sessions', 'duration', 'total_data_volume']
+    cols = ['user_sessions', 'time_duration', 'Total Data Volume (Bytes)']
     df_outliers.replace_outliers_with_iqr(cols)
     res_df = utils.scale_and_normalize(df_outliers.df)
     return res_df
