@@ -8,3 +8,9 @@ Apart from understand the data provided and extract insight, The project has the
 - User Engagement analysis
 - User Experience analysis
 - User Satisfaction analysis
+## How To Run
+1. Clone the Repository:
+git clone https://github.com/gezish/TellCo-UserDataAnalytics.git
+2. Set Up Virtual Environment:
+- Navigate into the project directory:
+cd <project_directory>
