@@ -18,7 +18,7 @@ test_requirements = []
 
 setup(
     author="Gezahegne",
-    email="enggezahegn.w@gmail.com",
+    #email="enggezahegn.w@gmail.com",
     python_requires='>=3.6',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
