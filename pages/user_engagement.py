@@ -18,15 +18,15 @@ from streamlit_plot import *
 import tracemalloc
 utils = DfUtils()
 helper = DfHelper()
-tracemalloc.start()
-tracemalloc.get_traced_memory()
-@st.cache_data
+
+
+#@st.cache_data
 def loadCleanData():
     df = pd.read_csv("./data/my_clean_data.csv")
     return df
 
 
-@st.cache_data
+#@st.cache_data
 def getEngagemetData():
     df = loadCleanData().copy()
     user_engagement_df = df[['MSISDN/Number', 'Bearer Id', 'Dur. (ms).1', 'Total Data Volume (Bytes)']].copy(
@@ -38,13 +38,13 @@ def getEngagemetData():
     return user_engagement
 
 
-@st.cache_data
+#@st.cache_data
 def getNormalData(df):
     res_df = utils.scale_and_normalize(df)
     return res_df
 
 
-@st.cache_data
+#@st.cache_data
 def get_distortion_and_inertia(df, num):
     distortions, inertias = utils.choose_kmeans(df.copy(), num)
     return distortions, inertias
@@ -97,10 +97,9 @@ def app():
     ''')
     
     num = st.selectbox('Select', range(0, 20))
+    tracemalloc.start()
     select_num = 1
-    current_memory, peak_memory = tracemalloc.get_traced_memory()
-    st.write(f"Current memory usage: {current_memory} bytes")
-    st.write(f"Peak memory usage: {peak_memory} bytes")
+    
     if(num != 0):
         normal_df = getNormalData(user_engagement)
         elbowPlot(normal_df, num+1)
@@ -110,7 +109,9 @@ def app():
             Select the optimized values for k
         ''')
         select_num = st.selectbox('Select', range(1, num+1))
-
+        current_memory, peak_memory = tracemalloc.get_traced_memory()
+        st.write(f"Current memory usage: {current_memory} bytes")
+        st.write(f"Peak memory usage: {peak_memory} bytes")
     if(select_num != 1):
 
         kmeans = KMeans(n_clusters=select_num, random_state=0).fit(normal_df)
