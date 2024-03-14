@@ -5,6 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
+TellCo-UserDataAnalytics2/
 
 # Distribution / packaging
 .Python
@@ -13,6 +14,9 @@ develop-eggs/
 dist/
 downloads/
 eggs/
+telco
+data
+Week-2
 .eggs/
 lib/
 lib64/

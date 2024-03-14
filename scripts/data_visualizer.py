@@ -7,6 +7,9 @@ import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from IPython.display import Image
+
+import plotly.io as pio
 
 def plotly_plot_pie(df, column, limit=None):
     a = pd.DataFrame({'count': df.groupby([column]).size()}).reset_index()
@@ -15,7 +18,11 @@ def plotly_plot_pie(df, column, limit=None):
         a.loc[a['count'] < limit, column] = f'Other {column}s'
     fig = px.pie(a, values='count', names=column, title=f'Distribution of {column}s', width=800, height=500)
     fig.show()
-
+def plotly_plot_pie(data, column_name, limit, chart_height=600, chart_width=800):
+    top_values = data[column_name].value_counts().head(limit)
+    fig = px.pie(names=top_values.index, values=top_values.values, title=f'Top {limit} {column_name} Distribution')
+    fig.update_layout(height=chart_height, width=chart_width)
+    return fig
 def plotly_plot_hist(df, column, color=['cornflowerblue']):
     fig = px.histogram(
             df,
@@ -59,9 +66,16 @@ def plot_bar(df:pd.DataFrame, x_col:str, y_col:str, title:str, xlabel:str, ylabe
     plt.ylabel(ylabel, fontsize=16)
     plt.show()
 
-def plot_heatmap(df:pd.DataFrame, title:str, cmap='Reds')->None:
+"""def plot_heatmap(df:pd.DataFrame, title:str, cmap='Reds')->None:
     plt.figure(figsize=(12, 7))
     sns.heatmap(df, annot=True, cmap=cmap, vmin=0, vmax=1, fmt='.2f', linewidths=.7, cbar=True )
+    plt.title(title, size=18, fontweight='bold')
+    plt.show()
+"""
+
+def plot_heatmap(df: pd.DataFrame, title: str, cmap='Reds', width=12, height=7) -> None:
+    plt.figure(figsize=(width, height))
+    sns.heatmap(df, annot=True, cmap=cmap, vmin=0, vmax=1, fmt='.2f', linewidths=.7, cbar=True)
     plt.title(title, size=18, fontweight='bold')
     plt.show()
 
