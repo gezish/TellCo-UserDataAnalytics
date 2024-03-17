@@ -5,7 +5,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import streamlit as st
-from streamlit_plot import *
+#from streamlit_plot import *
 from sklearn.cluster import KMeans
 
 sys.path.insert(1, '../scripts')
@@ -20,19 +20,21 @@ utils = DfUtils()
 helper = DfHelper()
 
 
-@st.cache
+st.cache_data
 def getEngagemetData():
-    df = pd.read_csv("./data/TellCo_user_engagement.csv")
+    df = pd.read_csv("./data/TellCo_user_engagements.csv")
+    print(df.info())
     return df
 
 
-@st.cache
+st.cache_data
 def getExperienceData():
-    df = pd.read_csv("./data/TellCo_user_experiance.csv")
+    df = pd.read_csv("./data/TellCo_user_experience_data.csv")
+    print(df.info())
     return df
 
 
-@st.cache
+st.cache_data
 def getNormalExperience(df):
     df_outliers = DfOutlier(df.copy())
     cols = ["total_avg_rtt",
@@ -42,31 +44,34 @@ def getNormalExperience(df):
     df = utils.scale_and_normalize(df_outliers.df)
     return df
 
-@st.cache
+st.cache_data
 def getNormalEngagement(df):
     df_outliers = DfOutlier(df.copy())
-    cols = ['sessions', 'duration', 'total_data_volume']
+    cols = ['user_sessions', 'time_duration', 'Total Data Volume (Bytes)']
     df_outliers.replace_outliers_with_iqr(cols)
     res_df = utils.scale_and_normalize(df_outliers.df)
     return res_df
 
 
 def getEngagemetModel():
-    with open("./models/user_engagement.pkl", "rb") as f:
+    with open("./models/TellCo_user_engagement.pkl", "rb") as f:
         kmeans = pickle.load(f)
+        kmeans.n_init='auto'
     return kmeans
 
 def getExperienceModel():
     with open("./models/TellCo_user_experiance.pkl", "rb") as f:
         kmeans = pickle.load(f)
+        kmeans.n_init='auto'
     return kmeans
 
 def getUserEngagement(less_engagement):
     eng_df = getEngagemetData().copy()
     eng_model = getEngagemetModel()
-    eng_df = eng_df.set_index('MSISDN/Number')[
-        ['time_duration', 'Total Data Volume (Bytes)', 'user_sessions']]
+    eng_df = eng_df.set_index('MSISDN/Number')[['time_duration', 'Total Data Volume (Bytes)', 'user_sessions']]
     eng_normal = getNormalEngagement(eng_df).copy()
+    
+    
     distance = eng_model.fit_transform(eng_normal)
     distance_from_less_engagement = list(
         map(lambda x: x[less_engagement], distance))
@@ -77,8 +82,8 @@ def getUserEngagement(less_engagement):
 def getUserExperience(worst_experience):
     exp_df = getExperienceData().copy()
     exp_model = getExperienceModel()
-    exp_df = exp_df.set_index('MSISDN/Number')[
-        ['total_avg_rtt', 'total_avg_tp', 'total_avg_tcp']]
+    print(exp_df.info())
+    exp_df = exp_df.set_index('MSISDN/Number')[ ['total_avg_rtt', 'total_avg_tp', 'total_avg_tcp']]
 
     exp_normal = getNormalExperience(exp_df).copy()
     distance = exp_model.fit_transform(exp_normal)

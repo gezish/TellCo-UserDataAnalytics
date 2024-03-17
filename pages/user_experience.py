@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 
 sys.path.insert(1, '../scripts')
 from constants import *
@@ -19,13 +20,13 @@ utils = DfUtils()
 helper = DfHelper()
 
 
-@st.cache
+@st.cache_data
 def loadCleanData():
     df = pd.read_csv("./data/my_clean_data.csv")
     return df
 
 
-@st.cache
+@st.cache_data
 def getExperienceDataFrame():
     df = loadCleanData().copy()
     user_experience_df = df[[
@@ -37,6 +38,7 @@ def getExperienceDataFrame():
         "TCP DL Retrans. Vol (Bytes)",
         "TCP UL Retrans. Vol (Bytes)",
         "Handset Type"]].copy()
+    
     user_experience_df['total_avg_rtt'] = user_experience_df['Avg RTT DL (ms)'] + user_experience_df['Avg RTT UL (ms)']
     user_experience_df['total_avg_tp'] = user_experience_df['Avg Bearer TP DL (kbps)'] + user_experience_df['Avg Bearer TP UL (kbps)']
     user_experience_df['total_avg_tcp'] = user_experience_df['TCP DL Retrans. Vol (Bytes)'] + user_experience_df['TCP UL Retrans. Vol (Bytes)']
@@ -44,22 +46,22 @@ def getExperienceDataFrame():
     return user_experience_df
 
 
-@st.cache
+@st.cache_data
 def getExperienceData():
     df = getExperienceDataFrame().copy()
-    user_experience = df.groupby('msisdn_number').agg({
+    user_experience = df.groupby('MSISDN/Number').agg({
         'total_avg_rtt': 'sum',
         'total_avg_tp': 'sum',
         'total_avg_tcp': 'sum'})
     return user_experience
 
 
-@st.cache
+@st.cache_data
 def getNormalData(df):
     res_df = utils.scale_and_normalize(df)
     return res_df
 
-@st.cache
+@st.cache_data
 def get_distortion_andinertia(df, num):
     distortions, inertias = utils.choose_kmeans(df.copy(), num)
     return distortions, inertias

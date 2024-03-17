@@ -15,11 +15,13 @@ from df_overview import DfOverview
 from df_outlier import DfOutlier
 from constants import *
 from streamlit_plot import *
-import tracemalloc
+from data_visualizer import *
+import pyarrow as pa
 utils = DfUtils()
 helper = DfHelper()
 
 
+import matplotlib.pyplot as plt
 #@st.cache_data
 def loadCleanData():
     df = pd.read_csv("./data/my_clean_data.csv")
@@ -50,12 +52,13 @@ def get_distortion_and_inertia(df, num):
     return distortions, inertias
 
 
+
 def plotTop10(df):
     col = st.sidebar.selectbox(
         "Select top 10 from", (["Sessions", "Duration", "Total data volume"]))
     if col == "Sessions":
         sessions = df.nlargest(10, "user_sessions")['user_sessions']
-        return hist(sessions)
+        return plot_hist(sessions)
     elif col == "Duration":
         duration = df.nlargest(10, "time_duration")['time_duration']
         return hist(duration)
@@ -82,11 +85,14 @@ def app():
     st.title('User Engagement analysis')
     st.header("Top 10 customers per engagement metrics")
     user_engagement = getEngagemetData().copy()
+    
     df_outliers = DfOutlier(user_engagement)
     cols = ['user_sessions', 'time_duration', 'Total Data Volume (Bytes)']
     df_outliers.replace_outliers_with_iqr(cols)
     user_engagement = df_outliers.df
-    plotTop10(user_engagement)
+    
+    
+    plotTop10((user_engagement))
 
     st.header("Clustering customers based on their engagement metric")
     st.markdown(
