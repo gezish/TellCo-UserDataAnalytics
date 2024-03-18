@@ -15,6 +15,11 @@ from df_overview import DfOverview
 from df_utils import DfUtils
 from df_helper import DfHelper
 from streamlit_plot import *
+from sqlalchemy import create_engine
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_colwidth', None)
+pd.set_option("expand_frame_repr", False)
+pd.set_option('display.float_format', '{:.2f}'.format)
 
 utils = DfUtils()
 helper = DfHelper()
@@ -33,7 +38,6 @@ def getExperienceData():
     print(df.info())
     return df
 
-
 @st.cache_data
 def getNormalExperience(df):
     df_outliers = DfOutlier(df.copy())
@@ -43,7 +47,6 @@ def getNormalExperience(df):
     df_outliers._outliers_with_iqr(cols)
     df = utils.scale_and_normalize(df_outliers.df)
     return df
-
 
 @st.cache
 def getNormalEngagement(df):
