@@ -16,7 +16,7 @@ from sklearn.preprocessing import StandardScaler, normalize
 import pickle
 from PIL import Image
 from sklearn.cluster import KMeans
-
+@st.cache_data
 def load_data():
     data = pd.read_csv('./data/my_clean_data.csv')
     return data
@@ -26,7 +26,7 @@ def count_values(data, column_name):
     value_counts = data[column_name].value_counts().reset_index()
     value_counts.columns = [column_name, 'counts']
     return value_counts
-
+@st.cache_data
 def getExperienceDataFrame():
     df = load_data().copy()
     user_experience_df = df[[
@@ -44,7 +44,7 @@ def getExperienceDataFrame():
     user_experience_df['total_avg_tcp'] = user_experience_df['TCP DL Retrans. Vol (Bytes)'] + user_experience_df['TCP UL Retrans. Vol (Bytes)']
 
     return user_experience_df
-
+@st.cache_data
 def getExperienceData():
     df = getExperienceDataFrame().copy()
     user_experience = df.groupby('MSISDN/Number').agg({

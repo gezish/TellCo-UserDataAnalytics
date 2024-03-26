@@ -1,40 +1,82 @@
+import sys, os
+import streamlit as st
 import pickle
 import numpy as np
 import pandas as pd
-from math import floor
+#st.set_option('deprecation.showPyplotGlobalUse', False)
 from sqlalchemy import create_engine
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from scipy.stats import zscore
+
+
 from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler, normalize
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
+
 from sqlalchemy import create_engine
-import sys, os
+from scripts import data_visualizer
+from io import StringIO
 
+@st.cache_data
+def load_data():
+    data = pd.read_csv('./data/my_clean_data.csv')
+    return data
 
+@st.cache_data
+def load_engagement_data():
+    data = pd.read_csv("./data/TellCo_user_engagements.csv")
+    return data
 
-
-def app():
-    st.title('User Satisfaction Analysis')
-    # load data
-    df = pd.read_csv("../data/my_clean_data.csv")
-    df.info()
-
-    user_engagements = pd.read_csv("../data/TellCo_user_engagements.csv")
-    
-    user_experiance = pd.read_csv("../data/TellCo_user_experience_data.csv")
-    user_experiance.head(5)
-    
-    # load models
-    with open("../models/TellCo_user_engagement.pkl", "rb") as f:
+@st.cache_data
+def user_experiance_data():
+    data = pd.read_csv("./data/TellCo_user_experience_data.csv")
+    return data
+def data_info(df):
+    st.markdown('**Data Info**')
+    buffer = StringIO()
+    df.info(buf=buffer)
+    s = buffer.getvalue()
+    st.text(s)
+def load_eng_model():
+    with open("./models/TellCo_user_engagement.pkl", "rb") as f:
         kmeans1 = pickle.load(f)
         kmeans1.n_init='auto'
-        
-        
+            
+    return kmeans1
+
+def load_exp_model():
+    with open("./models/TellCo_user_experiance.pkl", "rb") as f:
+        kmeans2 = pickle.load(f)
+        kmeans2.n_init='auto'
+    return kmeans2    
+def main():
+    st.title('User Satisfaction Analysis')
+    st.markdown('##### Load Clean data')
+    # load data
+    data_load_state = st.text('Loading data...')
+    data = load_data()
+    data_load_state.text('Loading data... done!') 
+    data_info(data)
+
+    st.markdown('##### Load engagement data')    
+    data_load_state.text('Loading engagement data...!') 
+    user_engagements = load_engagement_data()
+    data_load_state.text('Loading engagement data... done!')
+    data_info(user_engagements)
+
+    st.markdown('##### Load experience data')
+    data_load_state.text('Loading user experiance data...!') 
+    user_experiance = user_experiance_data()
+    data_load_state.text('Loading user experiance data... done!')
+    data_info(user_experiance)
+    
+    # load models
+    data_load_state.text('Loading user engagement model . . .!')
+    kmeans1 = load_eng_model()
+    data_load_state.text('Loading the model completed!')  
+    less_engagement = 3
     # Distance between the centroid and samples
     eng_df = user_engagements.set_index('MSISDN/Number')[
     ['time_duration', 'Total Data Volume (Bytes)', 'user_sessions']]
@@ -53,10 +95,7 @@ def app():
     user_engagements.head(5)
     
     #Considering the experience score as the Euclidean distance between the user data point & the worst experience’s cluster members
-    
-    with open("../models/TellCo_user_experiance.pkl", "rb") as f:
-        kmeans2 = pickle.load(f)
-        kmeans2.n_init='auto'
+    kmeans2 = load_exp_model()
     
     worst_experiance = 0
     exp_df = user_experiance.set_index('MSISDN/Number')[['total_avg_rtt', 'total_avg_tp', 'total_avg_tcp']]
@@ -160,3 +199,6 @@ def app():
     
     
     #Model deployment tracking - deploy the model and monitor your model. Here you can use MlOps tools which can help you to track your model’s change. Your model tracking report includes code version, start and end time, source, parameters, metrics(loss convergence) and artifacts or any output file regarding each specific run. (CSV file, screenshot)
+    
+if __name__ == '__main__':
+    main()
