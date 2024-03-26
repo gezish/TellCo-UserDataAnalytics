@@ -10,10 +10,14 @@ from pages import experiance_new
 from pages import user_satisfaction
 from pages import user_experience
 from pages import over
+from pages import Bussines
 #import streamlit as st
 # from flask import Flask
 
+
+
 PAGES = {
+    "Bussines Need": Bussines,
     "Data Overview": Data_Overview,
     "User Engagement Analysis":  user_engagement,
     "User Engagement Analysis":  over,

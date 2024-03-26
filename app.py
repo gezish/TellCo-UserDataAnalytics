@@ -1,6 +1,6 @@
 
 """The setup script."""
-
+import streamlit as st
 from setuptools import setup, find_packages
 
 with open('README.md') as readme_file:
@@ -17,6 +17,8 @@ requirements = requirements_list
 test_requirements = []
 
 setup(
+    
+    
     author="Gezahegne",
     #email="enggezahegn.w@gmail.com",
     python_requires='>=3.6',
