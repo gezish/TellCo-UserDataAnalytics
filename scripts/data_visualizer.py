@@ -102,9 +102,11 @@ def plot_scatter(df: pd.DataFrame, x_col: str, y_col: str) -> None:
     plt.yticks( fontsize=14)
     plt.show()
 
+
 def hist(sr):
     x = ["Id: " + str(i) for i in sr.index]
     fig = px.histogram(x=x, y=sr.values)
+    fig.update_layout(width=800, height=600)  # Set the width and height of the plot
     fig.show()
     
 def mult_hist(sr, rows, cols, title_text, subplot_titles, interactive=False):

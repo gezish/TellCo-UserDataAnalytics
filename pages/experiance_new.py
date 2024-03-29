@@ -59,15 +59,15 @@ def app():
     st.title('User Experience Analytics:')
   
     #st.title('User Experience Analytics')
-    st.header("Top 10 customers per engagement metrics")
+    #st.header("Top 10 customers per engagement metrics")
     user_experience = getExperienceDataFrame().copy()
-    st.markdown('#### Experience Data Info:')
+    st.markdown('#### User Experience Metrics Data Info:')
     buffer = StringIO()
     user_experience.info(buf=buffer)
     s = buffer.getvalue()
     st.text(s)
     #st.write(user_experience.info())
-    st.markdown(' 1. Aggregate, per customer, the following information (treat missing & outliers by replacing by the mean or the mode of the corresponding variable):')
+    st.markdown(' **1. Aggregate, per customer, the following information (treat missing & outliers by replacing by the mean or the mode of the corresponding variable):**')
     st.markdown('* Average TCP retransmission')
     st.markdown('* Average RTT')
     st.markdown('* Handset type')
@@ -86,6 +86,9 @@ def app():
     user_experience["total_avg_tp"] = _user_experience["total_avg_tp"]['sum']
     user_experience["total_avg_tcp"] = _user_experience["total_avg_tcp"]['sum']
     user_experience["Handset Type"] = _user_experience["Handset Type"]['<lambda>']
+    st.write('**Aggregating User Experience Metrics Per User**')
+    
+    user_experience['MSISDN/Number'] = user_experience['MSISDN/Number'].astype(str)
     st.write(user_experience.head())  
     
     st.markdown(' 2. Compute & list 10 of the top, bottom and most frequent:')
@@ -96,17 +99,17 @@ def app():
     #TCP values in the dataset.
         
     st.write("**TCP values in the dataset**")
-    image = Image.open('./data/first.png')
+    image = Image.open('./data/first.jpg')
     st.image(image, caption='TCP values in the dataset', use_column_width=True)
               
     st.write("**RTT values in the dataset.**")
     
-    image = Image.open('./data/second.png')
+    image = Image.open('./data/second.jpg')
     st.image(image, caption='RTT values in the dataset', use_column_width=True)
     
     st.write("**Throughput values in the dataset**")
     
-    image = Image.open('./data/third.png')
+    image = Image.open('./data/third.jpg')
     st.image(image, caption='Throughput values in the dataset', use_column_width=True)
     
     st.markdown(' 3. Compute & report:')
@@ -120,19 +123,19 @@ def app():
     # Display the first few rows of the aggregated DataFrame
     st.write(handset_type_df.head())
     
-    image = Image.open('./data/fourth.png')
+    image = Image.open('./data/fourth.jpg')
     st.image(image, caption='total_avg_tp', use_column_width=True)   
     
     
-    image = Image.open('./data/fivth.png')
+    image = Image.open('./data/fivth.jpg')
     st.image(image, caption='total_avg_tp top 20', use_column_width=True) 
    
 
-    image = Image.open('./data/6.png')
+    image = Image.open('./data/6.jpg')
     st.image(image, caption='Total Average Throughput', use_column_width=True) 
     
     
-    image = Image.open('./data/7.png')
+    image = Image.open('./data/7.jpg')
     st.image(image, caption='Total Average Throughput', use_column_width=True) 
 
    

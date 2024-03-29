@@ -45,7 +45,7 @@ def app():
         st.table(types.reset_index(name='Count'))
     
     
-    st.markdown('#### Here, From the Above result we can understand that:-;')
+    st.markdown('#### Here, from the Above result we can understand that:-')
 
     st.markdown("1. The most used handset model by customer is Huawei B528S-23A which is manufactured by Huawei")
     st.markdown("2. In regard to manufacturing the highest counts of handsets are made by Apple.But, it looks that Apple's Handset are not prefered by customers.This concers Samsung manufacturers too.")

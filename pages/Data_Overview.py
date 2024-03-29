@@ -42,7 +42,7 @@ def app():
                                                   'Overview of Type and Usage statistics',
                                                   'Bivariate analysis',
                                                   'Correlation Analysis Results',
-                                                  'User Engagments'
+                                                  
                                                   ])
     st.title('Data Overview')
     if selected_section == 'Home':
