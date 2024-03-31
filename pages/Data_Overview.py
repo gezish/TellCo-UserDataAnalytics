@@ -72,25 +72,51 @@ def app():
         df = loadOriginalData()
         st.write(df.head(10))
         st.write('**Data Shape:**', df.shape)
-        st.markdown('**total number of items in the dataset:**', df.size)
+        totalCells=df.size
+        st.markdown('**Total number of items in the dataset:**', totalCells)
         st.markdown('##### Data Cleaning, Transforming and Extraction')
         if st.checkbox('Handling Missing Values'):
             missingCount = df.isnull().sum()
             totalMissing = missingCount.sum()
             totalCells=df.size
             st.write('**Check Missing values**',missingCount)  
-            st.write('**totalMissing =**', missingCount.sum())
+            st.write('**TotalMissing =**', missingCount.sum())
             st.write("**The TellCo dataset contains:**", round(((totalMissing/totalCells) * 100), 2),"%", "missing values.")
             missed = dc.missing_values_table(df)
             st.write("**Dataframe With percent of missing values:**\n",missed )
-            st.markdown('**Note:** HFrom the above result, I can see that some of the columns has a greater missing values and I decide to drop a column with missing value of greater than or equal to 30% of the entire column data')
-            st.markdown('Column to be removed based on tha above criterion:',missed[missed['% of Total Values'] >= 30.00].index.tolist())
+            
+            st.markdown('**Note:** From the above result, I can see that some of the columns has a greater missing values and I decide to drop a column with missing value of greater than or equal to 30% of the entire column data')
+            columns_to_remove = missed[missed['% of Total Values'] >= 30.00].index.tolist()
+            st.write('**Columns With data loss:**', columns_to_remove)
+            
+            #st.markdown('Column to be removed based on tha above criterion:',missed[missed['% of Total Values'] >= 30.00].index.tolist())
             st.markdown('**Note:-** From Business requirement we have understood that TCP UL Retrans and TCP DL Retrans are required for Experience of user analysis. so we will not remove them')
             columns_to_remove = [col for col in columns_to_remove if col not in ['TCP UL Retrans. Vol (Bytes)','TCP DL Retrans. Vol (Bytes)']]
             df_copy = df.copy()
             my_df = df.drop(columns_to_remove, axis=1)
             st.write("Data shape after dropping:", my_df.shape)
-            dc.missing_values_table(df)
+            missing_new = dc.missing_values_table(my_df)
+            
+            st.markdown('##### Apply filling techniques')
+            st.markdown("Backward Filling for **TCP UL Retrans. Vol (Bytes)** and **Avg RTT DL (ms)**")        
+                # backward filling
+            dc.fix_missing_bfill(my_df, 'TCP UL Retrans. Vol (Bytes)')
+            dc.fix_missing_ffill(my_df, 'Avg RTT DL (ms)')
+            dc.fix_missing_bfill(my_df, 'TCP DL Retrans. Vol (Bytes)')
+            st.markdown("**Skew data check**") 
+            my_df['Avg RTT DL (ms)'].skew(skipna=True)
+            my_df['Avg RTT UL (ms)'].skew(skipna=True)
+            missing_new = dc.fix_missing_ffill(my_df, 'Avg RTT UL (ms)')
+            st.write(missing_new)
+            st.write("**Here-** we have Handset Type and Handset Manufacturer are catagorical values so we can change there value to not_known")
+        
+            dc.fix_missing_value(my_df, 'Handset Type', 'not_known')
+            dc.fix_missing_value(my_df, 'Handset Manufacturer', 'not_known')
+        
+            missing_new=dc.drop_rows_with_missing_values(my_df)
+            st.write("**Final data missing Values:**", missing_new)
+        
+            
     elif selected_section == 'Data After preprocessing':
         st.header('Data After preprocessing complete')
         data_load_state = st.text('Loading data...')
