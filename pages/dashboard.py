@@ -5,10 +5,10 @@ sys.path.append('.')
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
 
 from pages import Data_Overview
-from pages import user_engagement
+#from pages import user_engagement
 from pages import experiance_new
-from pages import user_satisfaction
-from pages import user_experience
+#from pages import user_satisfaction
+#from pages import user_experience
 from pages import over
 from pages import sat
 from pages import Business

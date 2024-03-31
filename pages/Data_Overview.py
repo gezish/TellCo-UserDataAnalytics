@@ -1,3 +1,5 @@
+import os,sys
+sys.path.append(os.path.abspath(os.path.join('../scripts')))
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -10,6 +12,12 @@ import df_overview as DfOverview
 from scripts import data_selector
 import plotly.express as px
 from io import StringIO
+
+
+from scripts import data_selector as ds
+from scripts import data_cleaner as dc
+#from scripts import OutlierHandler as oh
+
 
 @st.cache_data
 def load_description():
@@ -60,10 +68,29 @@ def app():
         #st.header('Sample df from the Original data')
     
     elif selected_section == 'Sample of orginal Df':
-        st.header('Sample of orginal Data Frame')
+        st.markdown('**Sample of Original df and Cleaning**')
         df = loadOriginalData()
         st.write(df.head(10))
-    
+        st.write('**Data Shape:**', df.shape)
+        st.markdown('**total number of items in the dataset:**', df.size)
+        st.markdown('##### Data Cleaning, Transforming and Extraction')
+        if st.checkbox('Handling Missing Values'):
+            missingCount = df.isnull().sum()
+            totalMissing = missingCount.sum()
+            totalCells=df.size
+            st.write('**Check Missing values**',missingCount)  
+            st.write('**totalMissing =**', missingCount.sum())
+            st.write("**The TellCo dataset contains:**", round(((totalMissing/totalCells) * 100), 2),"%", "missing values.")
+            missed = dc.missing_values_table(df)
+            st.write("**Dataframe With percent of missing values:**\n",missed )
+            st.markdown('**Note:** HFrom the above result, I can see that some of the columns has a greater missing values and I decide to drop a column with missing value of greater than or equal to 30% of the entire column data')
+            st.markdown('Column to be removed based on tha above criterion:',missed[missed['% of Total Values'] >= 30.00].index.tolist())
+            st.markdown('**Note:-** From Business requirement we have understood that TCP UL Retrans and TCP DL Retrans are required for Experience of user analysis. so we will not remove them')
+            columns_to_remove = [col for col in columns_to_remove if col not in ['TCP UL Retrans. Vol (Bytes)','TCP DL Retrans. Vol (Bytes)']]
+            df_copy = df.copy()
+            my_df = df.drop(columns_to_remove, axis=1)
+            st.write("Data shape after dropping:", my_df.shape)
+            dc.missing_values_table(df)
     elif selected_section == 'Data After preprocessing':
         st.header('Data After preprocessing complete')
         data_load_state = st.text('Loading data...')

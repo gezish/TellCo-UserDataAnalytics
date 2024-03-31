@@ -64,7 +64,7 @@ def load_exp_model():
         kmeans2.n_init='auto'
         data_load_state.text('Loading the experience model Done!')       
     return kmeans2    
-def main():
+def app():
     st.title('User Satisfaction Analysis')
     st.markdown('##### Load Clean data')
     # load data
@@ -241,11 +241,11 @@ def main():
     st.write(user_satisfaction_df.groupby('cluster').agg({'engagement_score': 'sum', 'experience_score': 'sum'}))
     
     st.write(' **Note:** - Cluster 1 has higher Engagement and satisfaction score. \n - Cluster 2 has vert low expirience score but higher engagement score.')
-    st.write('Export the final table containing all user id + engagement, experience & satisfaction scores in your local MySQL database.')# Report a screenshot of a select query output on the exported table.
-    engine = create_engine('mysql+pymysql://root:2203@localhost/telecom_user_db')
+    #st.write('Export the final table containing all user id + engagement, experience & satisfaction scores in your local MySQL database.')# Report a screenshot of a select query output on the exported table.
+    #engine = create_engine('mysql+pymysql://root:2203@localhost/telecom_user_db')
     
     #Model deployment tracking - deploy the model and monitor your model. Here you can use MlOps tools which can help you to track your model’s change. Your model tracking report includes code version, start and end time, source, parameters, metrics(loss convergence) and artifacts or any output file regarding each specific run. (CSV file, screenshot)
     
     
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+#    main()
