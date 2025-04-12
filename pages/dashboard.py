@@ -16,7 +16,7 @@ from pages import Business
 PAGES = {
     "Home" : Business,
     "Data Overview": Data_Overview,
-    "User Engagement Analysis2":  over,
+    "User Engagement Analysis":  over,
     "User Experience Analytics": experiance_new,
     "User Satisfaction Analysis": sat,
     #"User Engagement Analysis":  user_engagement,
