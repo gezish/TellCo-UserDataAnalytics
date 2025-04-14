@@ -63,10 +63,10 @@ def app():
     user_experience = getExperienceDataFrame().copy()
     st.markdown('#### User Experience Metrics Data Info:')
     buffer = StringIO()
-    user_experience.info(buf=buffer)
+    user_experience.info()
     s = buffer.getvalue()
     st.text(s)
-    #st.write(user_experience.info())
+    st.write(user_experience.info())
     st.markdown(' **1. Aggregate, per customer, the following information (treat missing & outliers by replacing by the mean or the mode of the corresponding variable):**')
     st.markdown('* Average TCP retransmission')
     st.markdown('* Average RTT')
@@ -80,7 +80,7 @@ def app():
     'total_avg_tcp': 'sum',
     'Handset Type': [lambda x: x.mode()[0]]})
 
-    user_experience = pd.DataFrame(columns=["total_avg_rtt", "total_avg_tp", "total_avg_tcp", "Handset Type"])
+    #user_experience = pd.DataFrame(columns=["total_avg_rtt", "total_avg_tp", "total_avg_tcp", "Handset Type"])
 
     user_experience["total_avg_rtt"] = _user_experience["total_avg_rtt"]['sum']
     user_experience["total_avg_tp"] = _user_experience["total_avg_tp"]['sum']
